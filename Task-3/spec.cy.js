@@ -28,8 +28,23 @@ describe('template spec', () => {
     // Убедитесь, что страница загружена
     cy.wait(1000); // Задержка на 1 секунду
 
-    // Смена сортировки
-    cy.get('.product_sort_container').select('lohi');
+    // Сортировка по возрастанию цены
+    cy.get('.product_sort_container').select('lohi')
+    cy.wait(1000) // Добавлена задержка
+    cy.get('.inventory_item_price').then(($prices) => {
+      const prices = $prices.map((index, html) => parseFloat(html.innerText.replace('$', ''))).get()
+      const sortedPrices = [...prices].sort((a, b) => a - b)
+      expect(prices).to.deep.equal(sortedPrices)
+    })
+
+    // Сортировка по убыванию цены
+    cy.get('.product_sort_container').select('hilo')
+    cy.wait(1000) // Добавлена задержка
+    cy.get('.inventory_item_price').then(($prices) => {
+      const prices = $prices.map((index, html) => parseFloat(html.innerText.replace('$', ''))).get()
+      const sortedPrices = [...prices].sort((a, b) => b - a)
+      expect(prices).to.deep.equal(sortedPrices)
+    })
   });
 
   it('Нажатие на кнопки добавления в корзину двух товаров и оформление заказа', () => {
