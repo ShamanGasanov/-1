@@ -1,1 +1,1 @@
-
+для старта теста в терминале напишите команду python -m unittest test_note_app.py
